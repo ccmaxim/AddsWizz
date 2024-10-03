@@ -1,5 +1,6 @@
 package main;
 
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -31,7 +32,7 @@ public class ReadJsonFile {
         });
 
         String root = System.getProperty("user.dir");
-        String projectPath = root + "/src/test/resources/text_documents/downloads.txt";
+        String projectPath = Paths.get(root, "src", "test", "resources", "text_documents", "downloads.txt").toString();
         
         jsonProcessor.processFile(projectPath, targetShows, showCount, prerollCountByShowId, deviceTypeCount);
 
