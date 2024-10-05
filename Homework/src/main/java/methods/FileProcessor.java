@@ -3,25 +3,30 @@ package methods;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class JsonProcessor {
+public class FileProcessor {
 	private final ObjectMapper objectMapper;
 
-	public JsonProcessor(ObjectMapper objectMapper) {
+	public FileProcessor(ObjectMapper objectMapper) {
 		this.objectMapper = objectMapper;
 	}
 
-	public void processFile(String filePath, Set<String> targetShows, Map<String, Integer> showCount,
+	public void processFile(String filePath, Map<String, Integer> showCount,
 			Map<String, Integer> prerollCountByShowId, Map<String, Integer> deviceTypeCount) {
+		
+		Set <String> targetShows = new HashSet<>();
 		try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
 			reader.lines().forEach(line -> {
 				try {
 					JsonNode jsonNode = objectMapper.readTree(line);
+					String showId = jsonNode.path("downloadIdentifier").path("showId").asText();
+					targetShows.add(showId);
 					processObject(jsonNode, targetShows, showCount, prerollCountByShowId, deviceTypeCount);
 				} catch (IOException e) {
 					e.printStackTrace();
